@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Household Chores Manager — Django + HTMX"
 requires-python = ">=3.12"
 dependencies = [
-  "Django==5.1.8",
+  "Django==5.2.8",
   "psycopg[binary]==3.2.1",
   "gunicorn==22.0.0",
   "whitenoise==6.8.2",

@@ -144,6 +144,13 @@ if not DEBUG:
     CSRF_COOKIE_SECURE = True
     SECURE_HSTS_SECONDS = 31536000
 
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "household-cache",
+    }
+}
+
 # Logging
 LOGGING = {
     "version": 1,
