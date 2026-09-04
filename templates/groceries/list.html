@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="font-semibold">Groceries</h1>
+<form method="post" action="{% url 'groceries:add' %}" class="mt-4 flex gap-2 bg-white border p-3 rounded-lg">
+  {% csrf_token %}
+  <select name="household" class="border rounded-md px-2 py-1 text-sm">{% for h in households %}<option value="{{ h.pk }}">{{ h.name }}</option>{% endfor %}</select>
+  <input name="name" placeholder="Oat milk" class="border rounded-md px-2 py-1 text-sm flex-1" required>
+  <input name="qty" placeholder="1" class="border rounded-md px-2 py-1 text-sm w-20">
+  <button class="bg-teal-600 text-white px-3 py-1 rounded-md text-sm">Add</button>
+</form>
+<ul class="mt-4 space-y-2">
+  {% for item in items %}
+  <li class="bg-white border p-3 rounded-lg flex justify-between items-center">
+    <span class="{% if item.checked %}line-through text-slate-500{% endif %}">{{ item.name }} {% if item.qty %}x{{ item.qty }}{% endif %}</span>
+    <form method="post" action="{% url 'groceries:toggle' item.pk %}">{% csrf_token %}<button class="text-sm border px-2 py-1 rounded-md">{% if item.checked %}Uncheck{% else %}Check{% endif %}</button></form>
+  </li>
+  {% empty %}
+  <li class="text-sm text-slate-600">No groceries.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

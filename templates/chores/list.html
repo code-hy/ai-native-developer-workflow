@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Chores{% endblock %}
+{% block content %}
+<div class="flex justify-between items-center">
+  <h1 class="text-lg font-semibold">Chores</h1>
+  {% if households %}
+    {% for h in households|slice:":1" %}
+      <a href="{% url 'chores:create' h.pk %}" class="bg-teal-600 text-white px-4 py-2 rounded-md text-sm">+ New chore</a>
+    {% endfor %}
+  {% endif %}
+</div>
+
+<form method="get" class="mt-4 flex gap-2 flex-wrap bg-white border border-slate-200 p-3 rounded-lg">
+  <select name="household" class="border rounded-md px-2 py-1 text-sm">
+    <option value="">All households</option>
+    {% for h in households %}
+      <option value="{{ h.pk }}" {% if request.GET.household == h.pk|stringformat:"s" %}selected{% endif %}>{{ h.name }}</option>
+    {% endfor %}
+  </select>
+  <select name="status" class="border rounded-md px-2 py-1 text-sm">
+    <option value="">All status</option>
+    <option value="todo" {% if request.GET.status == "todo" %}selected{% endif %}>To Do</option>
+    <option value="completed" {% if request.GET.status == "completed" %}selected{% endif %}>Completed</option>
+  </select>
+  <select name="assignee" class="border rounded-md px-2 py-1 text-sm">
+    <option value="">All assignees</option>
+    <option value="me" {% if request.GET.assignee == "me" %}selected{% endif %}>My chores</option>
+    <option value="pool" {% if request.GET.assignee == "pool" %}selected{% endif %}>Pool</option>
+  </select>
+  <input type="text" name="q" placeholder="Search" value="{{ request.GET.q }}" class="border rounded-md px-2 py-1 text-sm">
+  <button type="submit" class="bg-slate-100 px-3 py-1 rounded-md text-sm">Filter</button>
+</form>
+
+<div class="mt-4 grid gap-3">
+  {% for c in chores %}
+  <div id="chore-{{ c.pk }}" class="bg-white border border-slate-200 rounded-lg p-4 flex justify-between items-center">
+    <div>
+      <div class="font-medium">{{ c.title }} <span class="text-xs px-2 py-0.5 rounded-full {% if c.status == 'completed' %}bg-emerald-100 text-emerald-700{% elif c.is_overdue %}bg-rose-100 text-rose-700{% else %}bg-slate-100 text-slate-600{% endif %}">{{ c.get_status_display }}{% if c.is_overdue %} (Overdue){% endif %}</span></div>
+      <div class="text-sm text-slate-600">{{ c.get_category_display }} • effort {{ c.effort }} • due {{ c.due_at|date:"M j, Y H:i" }}{% if c.assignee %} • {{ c.assignee.email }}{% else %} • Pool{% endif %}</div>
+    </div>
+    <div class="flex gap-2">
+      <a href="{% url 'chores:edit' c.pk %}" class="text-sm text-slate-600 hover:text-slate-900 px-2 py-1 border rounded-md">Edit</a>
+      {% if c.status != 'completed' %}
+      <form method="post" action="{% url 'chores:complete' c.pk %}">{% csrf_token %}<button type="submit" class="text-sm bg-teal-600 text-white px-3 py-1 rounded-md">✓ Done</button></form>
+      {% endif %}
+    </div>
+  </div>
+  {% empty %}
+  <div class="bg-white border p-6 rounded-lg text-center text-sm text-slate-600">No chores yet.</div>
+  {% endfor %}
+</div>
+{% endblock %}

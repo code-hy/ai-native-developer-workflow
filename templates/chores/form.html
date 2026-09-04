@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}Chore form{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white border border-slate-200 rounded-lg p-6">
+  <h1 class="font-semibold">{% if object %}Edit chore{% else %}New chore{% endif %}</h1>
+  <form method="post" class="mt-4 space-y-4">
+    {% csrf_token %}
+    <div><label class="text-sm font-medium">Title</label>{{ form.title|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}{% if form.title.errors %}<p class="text-rose-600 text-sm">{{ form.title.errors.0 }}</p>{% endif %}</div>
+    <div><label class="text-sm font-medium">Description</label>{{ form.description|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}</div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="text-sm font-medium">Category</label>{{ form.category|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}</div>
+      <div><label class="text-sm font-medium">Effort 1-5</label>{{ form.effort|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}</div>
+    </div>
+    <div class="grid grid-cols-2 gap-3">
+      <div><label class="text-sm font-medium">Minutes</label>{{ form.minutes|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}</div>
+      <div><label class="text-sm font-medium">Assignee</label>{{ form.assignee|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}</div>
+    </div>
+    <div><label class="text-sm font-medium">Due at</label>{{ form.due_at|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}{% if form.due_at.errors %}<p class="text-rose-600 text-sm">{{ form.due_at.errors.0 }}</p>{% endif %}</div>
+    <div><label class="text-sm font-medium">RRule (optional)</label>{{ form.rrule|add_class:"w-full mt-1 border rounded-md px-3 py-2" }}</div>
+    <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded-md">Save</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}{{ household.name }} — Household{% endblock %}
+{% block content %}
+<div class="flex justify-between items-start">
+  <div>
+    <h1 class="text-xl font-semibold">{{ household.name }}</h1>
+    <p class="text-sm text-slate-600">{{ household.get_type_display }} • {{ household.timezone }} • created {{ household.created_at|date:"M j, Y" }}</p>
+  </div>
+  <a href="{% url 'households:list' %}" class="text-sm text-slate-600 hover:text-slate-900">All households</a>
+</div>
+
+<div class="mt-6 grid md:grid-cols-2 gap-6">
+  <div class="bg-white border border-slate-200 rounded-lg p-4">
+    <h2 class="font-medium">Members ({{ memberships|length }})</h2>
+    <ul class="mt-3 space-y-2">
+      {% for m in memberships %}
+      <li class="flex justify-between items-center text-sm border-b border-slate-100 py-2">
+        <span>{{ m.user.email }} <span class="text-slate-500">• {{ m.get_role_display }}</span></span>
+        <span class="text-xs text-slate-500">{{ m.joined_at|date:"M j" }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <div class="bg-white border border-slate-200 rounded-lg p-4">
+    <h2 class="font-medium">Invite someone</h2>
+    <form method="post" action="{% url 'households:invite' household.pk %}" class="mt-3 space-y-3">
+      {% csrf_token %}
+      <div>
+        <label class="text-sm font-medium">Email</label>
+        {{ invite_form.email|add_class:"w-full mt-1 rounded-md border-slate-300 border px-3 py-2" }}
+      </div>
+      <div>
+        <label class="text-sm font-medium">Role</label>
+        {{ invite_form.role|add_class:"w-full mt-1 rounded-md border-slate-300 border px-3 py-2" }}
+      </div>
+      <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700 text-sm">Send invite</button>
+    </form>
+    {% if invites %}
+    <div class="mt-4">
+      <h3 class="text-sm font-medium">Pending invites</h3>
+      <ul class="text-sm mt-2 space-y-1">
+        {% for inv in invites %}
+        <li class="flex justify-between"><span>{{ inv.email }} ({{ inv.role }})</span><span class="text-xs text-slate-500">expires {{ inv.expires_at|date:"M j" }} • token {{ inv.token|slice:":8" }}…</span></li>
+        {% endfor %}
+      </ul>
+      <p class="text-xs text-slate-500 mt-2">Invite link: /invite/&lt;token&gt;/</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

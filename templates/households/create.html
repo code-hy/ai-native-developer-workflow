@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+{% block title %}New household{% endblock %}
+{% block content %}
+<div class="max-w-lg mx-auto bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+  <h1 class="text-lg font-semibold">Create household</h1>
+  <p class="text-sm text-slate-600">Name your home and pick a type. You’ll be admin.</p>
+  <form method="post" class="mt-4 space-y-4">
+    {% csrf_token %}
+    <div>
+      <label class="text-sm font-medium">Name</label>
+      {{ form.name|add_class:"w-full mt-1 rounded-md border-slate-300 focus:border-teal-500 border px-3 py-2" }}
+      {% if form.name.errors %}<p class="text-sm text-rose-600">{{ form.name.errors.0 }}</p>{% endif %}
+    </div>
+    <div>
+      <label class="text-sm font-medium">Type</label>
+      {{ form.type|add_class:"w-full mt-1 rounded-md border-slate-300 border px-3 py-2" }}
+    </div>
+    <div>
+      <label class="text-sm font-medium">Timezone</label>
+      {{ form.timezone|add_class:"w-full mt-1 rounded-md border-slate-300 border px-3 py-2" }}
+      <p class="text-xs text-slate-500 mt-1">e.g., UTC, Europe/Berlin, America/New_York</p>
+    </div>
+    <button type="submit" class="w-full bg-teal-600 text-white py-2 rounded-md hover:bg-teal-700">Create household</button>
+  </form>
+</div>
+{% endblock %}

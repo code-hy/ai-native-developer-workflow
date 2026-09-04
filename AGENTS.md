@@ -1,7 +1,7 @@
 # AGENTS — Household Chores Manager
 
 > **Read first:** `_docs/plan.md` (vision + spec) → `_docs/process.md` (workflow) → `_docs/stack-decision.md` (Django+HTMX)
-> **Stack:** Django 5.1 + HTMX + Alpine.js + Tailwind CSS + PostgreSQL 16 + django-q2/Redis + Gunicorn + Docker Compose
+> **Stack:** Django 5.2 + HTMX + Alpine.js + Tailwind CSS + PostgreSQL 16 + django-q2/Redis + Gunicorn + Docker Compose (uv-managed, Python 3.12)
 > **Source of truth:** GitHub Issues (synced from `_docs/tasks.md`)
 
 ## Quick Start
@@ -11,18 +11,18 @@
 cp .env.example .env
 # edit SECRET_KEY, DATABASE_URL, etc.
 
-# 2. run (Docker — recommended)
+# 2. run (Docker — recommended, uv inside image)
 docker compose up --build
 # web: http://localhost:8000, mailpit: http://localhost:8025, db:5432, redis:6379
 
-# 3. run (local, no Docker)
-uv sync              # or pip install -r requirements.txt
+# 3. run (local, no Docker) — uv-only
+uv sync                 # creates .venv + installs from uv.lock (Python 3.12 pinned in .python-version)
 uv run python manage.py migrate
 uv run python manage.py createsuperuser
 uv run python manage.py runserver
 uv run python manage.py tailwind:start  # in separate terminal if editing CSS
 
-# 4. test / lint
+# 4. test / lint — uv-only
 uv run ruff check .
 uv run ruff format --check .
 uv run mypy .
@@ -35,7 +35,7 @@ npx playwright test                  # e2e for J1/J2/J3
 
 | Purpose | Command |
 |---|---|
-| Install | `uv sync` or `pip install -r requirements.txt` |
+| Install | `uv sync` |
 | Dev server | `uv run python manage.py runserver` |
 | Migrate | `uv run python manage.py migrate` |
 | Make migrations | `uv run python manage.py makemigrations` |
@@ -48,7 +48,7 @@ npx playwright test                  # e2e for J1/J2/J3
 | Type check | `uv run mypy .` |
 | E2E | `npx playwright test` |
 | Docker up | `docker compose up --build` |
-| Docker test | `docker compose exec web pytest -q` |
+| Docker test | `docker compose exec web uv run pytest -q` |
 
 ## Top-Level Rules
 

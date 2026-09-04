@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="font-semibold">Maintenance</h1>
+<div class="mt-4 grid gap-3">
+  {% for t in tasks %}
+  <div class="bg-white border p-4 rounded-lg flex justify-between items-center">
+    <div><div class="font-medium">{{ t.title }}</div><div class="text-sm text-slate-600">every {{ t.interval_days }} days • next {{ t.next_due_at|date:"M j, Y" }}{% if t.is_overdue %} • <span class="text-rose-600">Overdue</span>{% endif %}</div></div>
+    <form method="post" action="{% url 'maintenance:done' t.pk %}">{% csrf_token %}<button class="bg-teal-600 text-white px-3 py-1 rounded-md text-sm">Mark done</button></form>
+  </div>
+  {% empty %}
+  <div class="text-sm text-slate-600">No maintenance tasks.</div>
+  {% endfor %}
+</div>
+{% endblock %}
