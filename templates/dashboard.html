@@ -2,17 +2,25 @@
 {% block title %}Dashboard — Household{% endblock %}
 {% block content %}
 <div class="grid md:grid-cols-4 gap-4">
-  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Overdue</div><div class="text-2xl font-semibold mt-1">—</div></div>
-  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Due today</div><div class="text-2xl font-semibold mt-1">—</div></div>
-  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">My queue</div><div class="text-2xl font-semibold mt-1">—</div></div>
-  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Fairness</div><div class="w-full bg-slate-100 rounded-full h-3 mt-3 flex overflow-hidden"><div class="h-3 bg-teal-600 rounded-full" style="width:50%"></div></div><div class="text-xs text-slate-500 mt-1">Balanced</div></div>
-</div>
-<div class="mt-6 bg-white border border-slate-200 rounded-lg p-6">
-  <h2 class="font-semibold">Welcome to your Household</h2>
-  <p class="text-sm text-slate-600 mt-1">Scaffold live. Next: create household &amp; add chores.</p>
-  <div class="mt-4 flex gap-2">
-    <a href="/admin/" class="bg-teal-600 text-white px-4 py-2 rounded-md text-sm">Admin</a>
-    <a href="/chores/" class="bg-slate-100 px-4 py-2 rounded-md text-sm">Chores</a>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Overdue</div><div class="text-2xl font-semibold mt-1">{{ overdue_count }}</div></div>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Due today</div><div class="text-2xl font-semibold mt-1">{{ due_today_count }}</div></div>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">My queue</div><div class="text-2xl font-semibold mt-1">{{ my_queue_count }}</div></div>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm">
+    <div class="text-xs text-slate-500 uppercase tracking-wide">Fairness (30d)</div>
+    {% if fairness %}
+      <div class="w-full bg-slate-100 rounded-full h-3 mt-3 flex overflow-hidden">
+        {% for f in fairness %}
+          <div class="h-3" style="width: {{ f.pct }}%; background: {% cycle '#0d9488' '#f59e0b' '#0284c7' '#9333ea' %}"></div>
+        {% endfor %}
+      </div>
+      <div class="text-xs text-slate-500 mt-1">{% for f in fairness %}{{ f.user.email }}: {{ f.points }} pts{% if not forloop.last %} • {% endif %}{% endfor %}</div>
+    {% else %}
+      <div class="text-sm text-slate-600 mt-2">No data</div>
+    {% endif %}
   </div>
+</div>
+<div class="mt-6 flex gap-2">
+  <a href="{% url 'households:list' %}" class="bg-teal-600 text-white px-4 py-2 rounded-md text-sm">My households</a>
+  <a href="{% url 'chores:list' %}" class="bg-slate-100 px-4 py-2 rounded-md text-sm">Chores</a>
 </div>
 {% endblock %}

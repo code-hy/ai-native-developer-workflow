@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="font-semibold">Bills</h1>
+<div class="mt-4 grid gap-3">
+  {% for b in bills %}
+  <div class="bg-white border p-4 rounded-lg flex justify-between items-center">
+    <div><div class="font-medium">{{ b.name }} — {{ b.amount }} {{ b.currency }}</div><div class="text-sm text-slate-600">due {{ b.due_at|date:"M j" }} • {% if b.is_overdue %}<span class="text-rose-600">Overdue</span>{% else %}{{ b.get_status_display }}{% endif %}{% if b.payer %} • payer {{ b.payer.email }}{% endif %}</div></div>
+    <form method="post" action="{% url 'bills:toggle' b.pk %}">{% csrf_token %}<button class="border px-3 py-1 rounded-md text-sm">{% if b.status == 'paid' %}Mark due{% else %}Mark paid{% endif %}</button></form>
+  </div>
+  {% empty %}
+  <div class="text-sm text-slate-600">No bills.</div>
+  {% endfor %}
+</div>
+{% endblock %}

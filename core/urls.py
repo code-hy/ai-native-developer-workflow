@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import include, path
-from django.views.generic import TemplateView
 
+from core.views import DashboardView
 from households.views import InviteAcceptView
 
 urlpatterns = [
@@ -14,5 +14,5 @@ urlpatterns = [
     path("maintenance/", include("maintenance.urls")),
     path("activity/", include("activity.urls")),
     path("invite/<str:token>/", InviteAcceptView.as_view(), name="invite-accept"),
-    path("", TemplateView.as_view(template_name="dashboard.html"), name="dashboard"),
+    path("", DashboardView.as_view(), name="dashboard"),
 ]

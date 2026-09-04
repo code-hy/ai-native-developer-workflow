@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<h1 class="font-semibold">Activity</h1>
+<a href="{% url 'activity:export' %}" class="text-sm text-teal-700 hover:underline">Export CSV</a>
+<ul class="mt-4 space-y-2">
+  {% for a in activities %}
+  <li class="bg-white border p-3 rounded-lg text-sm">{{ a.created_at|date:"M j H:i" }} — {{ a.actor }} {{ a.action }} {{ a.entity_type }}#{{ a.entity_id }}</li>
+  {% empty %}
+  <li class="text-sm text-slate-600">No activity.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
