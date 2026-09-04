@@ -1,0 +1,50 @@
+[project]
+name = "household"
+version = "0.1.0"
+description = "Household Chores Manager — Django + HTMX"
+requires-python = ">=3.12"
+dependencies = [
+  "Django==5.1.8",
+  "psycopg[binary]==3.2.1",
+  "gunicorn==22.0.0",
+  "whitenoise==6.8.2",
+  "django-htmx==1.19.0",
+  "django-widget-tweaks==1.5.0",
+  "django-q2==1.6.1",
+  "python-dateutil==2.9.0.post0",
+]
+
+[tool.ruff]
+target-version = "py312"
+lint.select = ["E","F","I","B","UP","W"]
+lint.ignore = ["E501"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
+ignore_missing_imports = true
+plugins = ["mypy_django_plugin.main"]
+exclude = ["migrations", "tests/e2e"]
+
+[tool.django-stubs]
+django_settings_module = "core.settings"
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "core.settings"
+pythonpath = ["."]
+addopts = "-q --strict-markers"
+markers = ["e2e: end-to-end tests", "unit: unit tests", "integration: integration tests"]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.coverage.run]
+source = ["household", "core", "accounts", "chores", "groceries", "bills", "maintenance", "activity"]
+omit = ["*/migrations/*", "*/tests/*", "*/test_*.py", "manage.py"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — Household{% endblock %}
+{% block content %}
+<div class="grid md:grid-cols-4 gap-4">
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Overdue</div><div class="text-2xl font-semibold mt-1">—</div></div>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Due today</div><div class="text-2xl font-semibold mt-1">—</div></div>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">My queue</div><div class="text-2xl font-semibold mt-1">—</div></div>
+  <div class="bg-white border border-slate-200 rounded-lg p-4 shadow-sm"><div class="text-xs text-slate-500 uppercase tracking-wide">Fairness</div><div class="w-full bg-slate-100 rounded-full h-3 mt-3 flex overflow-hidden"><div class="h-3 bg-teal-600 rounded-full" style="width:50%"></div></div><div class="text-xs text-slate-500 mt-1">Balanced</div></div>
+</div>
+<div class="mt-6 bg-white border border-slate-200 rounded-lg p-6">
+  <h2 class="font-semibold">Welcome to your Household</h2>
+  <p class="text-sm text-slate-600 mt-1">Scaffold live. Next: create household &amp; add chores.</p>
+  <div class="mt-4 flex gap-2">
+    <a href="/admin/" class="bg-teal-600 text-white px-4 py-2 rounded-md text-sm">Admin</a>
+    <a href="/chores/" class="bg-slate-100 px-4 py-2 rounded-md text-sm">Chores</a>
+  </div>
+</div>
+{% endblock %}
