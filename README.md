@@ -3,7 +3,8 @@
 > **Everyone knows what’s next, who’s up, and that it’s fair.**  
 > Web app for shared households (roommates / families / couples) — self-hosted, Docker Compose, Django + HTMX.
 
-**Spec:** `_docs/plan.md` → **Stack:** `_docs/stack-decision.md` (Django 5.1 + HTMX + Tailwind + PostgreSQL 16) → **Process:** `_docs/process.md`
+**Spec:** `_docs/plan.md` → **Stack:** `_docs/stack-decision.md` (Django 5.2 + HTMX + Tailwind + PostgreSQL 16) → **Process:** `_docs/process.md`
+> **Python:** 3.12 pinned in `.python-version`, **uv** manages venv + lock (`uv.lock`), no `pip`/`requirements.txt`
 
 ## Quick Start
 
@@ -17,13 +18,13 @@ docker compose up --build
 # mailpit: http://localhost:8025  (email inbox)
 # db: 5432, redis: 6379
 
-docker compose exec web python manage.py createsuperuser
+docker compose exec web uv run python manage.py createsuperuser
 ```
 
-### Local (without Docker)
+### Local (without Docker) — uv-only
 
 ```bash
-uv sync  # or pip install -r requirements.txt
+uv sync  # creates .venv from uv.lock (Python 3.12)
 cp .env.example .env
 # set DATABASE_URL=sqlite:///db.sqlite3 for quick local without Postgres
 uv run python manage.py migrate
@@ -34,11 +35,11 @@ uv run python manage.py runserver  # http://127.0.0.1:8000
 uv run python manage.py tailwind:start
 ```
 
-## Commands
+## Commands — uv-only (no pip)
 
 | Purpose | Command |
 |---|---|
-| Install | `uv sync` or `pip install -r requirements.txt` |
+| Install | `uv sync` |
 | Dev server | `uv run python manage.py runserver` |
 | Migrate | `uv run python manage.py migrate` |
 | Make migrations | `uv run python manage.py makemigrations` |
